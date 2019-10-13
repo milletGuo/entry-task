@@ -1,10 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import '../index.css';
 
 class DataList extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    /**
+     * 删除按钮监听
+     */
+    onHandleDelClick(event) {
+        this.props.delData(event.target.getAttribute("data-index"));
+    }
+
+    /**
+     * 编辑按钮监听
+     */
+    onHandleEditClick(event) {
+        this.props.editData(event.target.getAttribute("data-index"));
     }
 
     render() {
@@ -28,8 +41,8 @@ class DataList extends React.Component {
                                     <td>{data.role}</td>
                                     <td>
                                         <div className="operation">
-                                            <button>编辑</button>
-                                            <button>删除</button>
+                                            <button onClick={this.onHandleEditClick.bind(this)} data-index={data.index}>编辑</button>
+                                            <button onClick={this.onHandleDelClick.bind(this)} data-index={data.index}>删除</button>
                                         </div>
                                     </td>
                                 </tr>
