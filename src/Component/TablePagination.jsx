@@ -5,10 +5,11 @@ class TablePagination extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currPageNum: 1,                  // 当前页码
-            pageNum: 0,                      // 总页数
-            pageNumStatus: 'unChoose',       // 页码状态
-            pageInput: ''                    // 输入的页码
+            currPageNum: 1,                   // 当前页码
+            pageNum: 0,                       // 总页数
+            pageNumStatus: 'unChoose',        // 页码状态
+            pageInput: '',                    // 输入的页码
+            pageArray: [],                     // 页码数组
         }
     }
 
@@ -17,10 +18,14 @@ class TablePagination extends React.Component {
         if (0 != nextProps.data.length % 5) {
             pageNum += 1;
         }
+        let pageArray = [];
+        for (let i = 0; i < pageNum; i++) {
+            pageArray.push((i + 1));
+        }
         this.setState({
             pageNum: pageNum,
+            pageArray: pageArray,
         });
-        this.renderPageHtml();
     }
 
     handleChange(event) {
@@ -86,9 +91,10 @@ class TablePagination extends React.Component {
      */
     choosePage(event) {
         this.setState({
-            currPageNum: event.target.getAttribute("data-number"),
+            currPageNum: parseInt(event.target.getAttribute("data-number")),
+            pageNumStatus: 'choose',
         });
-        this.showCurrentPage(this.state.currPageNum);
+        this.showCurrentPage(parseInt(event.target.getAttribute("data-number")));
     }
 
     /**
@@ -105,23 +111,16 @@ class TablePagination extends React.Component {
         }
     }
 
-    /**
-     * 渲染页码html
-     */
-    renderPageHtml() {
-        let html = '';
-        for (let i = 0; i < this.state.pageNum; i++) {
-            html += "<a href='#' class=" + (this.state.pageNumStatus) + " data-number=" + (i + 1) + " onClick=" + this.choosePage.bind(this) + ">" + (i + 1) + "</a>";
-        }
-        return { __html: html };
-    }
-
     render() {
         return (
             <div className="tablePageBox">
                 <div style={{ float: 'right', padding: '0px 20px' }}>
                     <button onClick={this.preText.bind(this)}>上一页</button>
-                    <div className="pageNumDiv" dangerouslySetInnerHTML={this.renderPageHtml()} />
+                    {
+                        this.state.pageArray.map((data) => {
+                            return <a href='#' className={this.state.pageNumStatus} key={data} data-number={data} onClick={this.choosePage.bind(this)}>{data}</a>
+                        })
+                    }
                     <button onClick={this.nextLink.bind(this)}>下一页</button>
                     <span style={{ margin: '0px 10px' }}>
                         到第<input className="pageInput" type="text" onChange={this.handleChange.bind(this)} />页

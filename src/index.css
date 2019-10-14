@@ -86,13 +86,17 @@
 }
 
 .unChoose {
+    margin: 0px 5px;
+    padding: 0px 5px;
     border: 1px #1E9FFF solid;
     background: #ffffff;
 }
 
 .choose {
-    border: 1px #959c9c solid;
-    background: #959c9c;
+    margin: 0px 5px;
+    padding: 0px 5px;
+    border: 1px #009688 solid;
+    background: #009688;
 }
 
 .pageInput {
