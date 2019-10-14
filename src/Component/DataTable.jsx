@@ -2,9 +2,8 @@ import React from 'react';
 import '../index.css';
 import TableTools from './TableTools.jsx';
 import DataList from './DataList.jsx';
+import TablePagination from './TablePagination';
 import EditData from './EditData';
-
-let index = 0;
 
 class DataTable extends React.Component {
     constructor(props) {
@@ -13,7 +12,8 @@ class DataTable extends React.Component {
             display: 'none',     // 控制弹窗的显示与隐藏
             status: '',          // 控制弹出窗口的状态
             index: 0,            // 需要编辑或删除的数据索引
-            lists: [],           // 控制表格中的数据
+            lists: [],           // 所有数据
+            dataToShow: [],      // 需要展示的数据 
         }
 
         // 首次渲染清空localStorage
@@ -24,12 +24,19 @@ class DataTable extends React.Component {
      * 更新数据
      */
     updateData(data) {
-        this.state.lists = [];  // 每次更新前将数据清空
-        const lists = this.state.lists;
-        for (let i = 0; i < JSON.parse(data).length; i++) {
-            lists.push(JSON.parse(data)[i]);
+        this.setState({ lists: JSON.parse(data) });
+        this.showData(JSON.parse(data));
+    }
+
+    /**
+     * 在表格中展示的数据
+     */
+    showData(data) {
+        if (data.length > 5) {
+            this.setState({ dataToShow: data.splice(0, 5) });
+        } else {
+            this.setState({ dataToShow: data });
         }
-        this.setState({ lists: lists });
     }
 
     /**
@@ -39,7 +46,6 @@ class DataTable extends React.Component {
         this.setState({
             display: 'block',
             status: 'create',
-            index: index++,
         });
     }
 
@@ -58,10 +64,10 @@ class DataTable extends React.Component {
      * 删除一条数据
      */
     delData(index) {
-        let arr = JSON.parse(localStorage.getItem('data'));
-        arr.splice(index-1,1);
-        localStorage.setItem('data', JSON.stringify(arr));
-        this.setState({ lists: arr });
+        let dataLists = JSON.parse(localStorage.getItem('data'));
+        dataLists.splice(index - 1, 1);
+        localStorage.setItem('data', JSON.stringify(dataLists));
+        this.setState({ lists: dataLists });
     }
 
     /**
@@ -76,8 +82,9 @@ class DataTable extends React.Component {
     render() {
         return (
             <div className="tableBox">
-                <TableTools create={this.addData.bind(this)} query={this.updateData.bind(this)}/>
-                <DataList lists={this.state.lists} delData={this.delData.bind(this)} editData={this.editData.bind(this)} />
+                <TableTools create={this.addData.bind(this)} query={this.updateData.bind(this)} />
+                <DataList lists={this.state.dataToShow} delData={this.delData.bind(this)} editData={this.editData.bind(this)} />
+                <TablePagination data={this.state.lists} showData={this.showData.bind(this)} />
                 <EditData display={this.state.display} status={this.state.status} index={this.state.index} close={this.closeDialog.bind(this)} submit={this.updateData.bind(this)} />
             </div>
         );

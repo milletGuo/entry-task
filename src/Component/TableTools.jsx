@@ -32,9 +32,8 @@ class TableTools extends React.Component {
     onHandleQueryClick() {
         let data = [];
         data = JSON.parse(localStorage.getItem('data'));
-        console.log(data);
         for (let i = 0; i < data.length; i++) {
-            if (data[i].name.indexOf(this.state.name) == -1) {
+            if (data[i].name.indexOf(this.state.name) === -1) {
                 data.splice(i--, 1);
             }
         }

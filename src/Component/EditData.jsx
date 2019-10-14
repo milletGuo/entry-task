@@ -13,6 +13,7 @@ class EditData extends React.Component {
             age: '',
             role: '',
         }
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -27,24 +28,29 @@ class EditData extends React.Component {
         })
     }
 
+    /**
+     * 数据校验功能
+     */
+    verificationData() {
+
+    }
+
     /**点击确定提交 */
     handleSubmit() {
-        let status = this.props.status;
-        let index = this.props.index;
+        // localStorage中获取数据
         let dataLists = [];
         if (localStorage.getItem('data') != null) {
             dataLists = JSON.parse(localStorage.getItem('data'));
         }
-        switch (status) {
+        switch (this.props.status) {
             case 'create':
-                // 获取localStorage中存储的数据
                 dataLists.push({ index: ++i, name: this.state.name, sex: this.state.sex, age: this.state.age, role: this.state.role });
                 localStorage.setItem('data', JSON.stringify(dataLists));
-                this.props.submit(localStorage.data);
+                this.props.submit(JSON.stringify(dataLists));
                 break;
             case 'edit':
                 for (let i = 0; i < dataLists.length; i++) {
-                    if (index == dataLists[i].index) {
+                    if (this.props.index == dataLists[i].index) {
                         dataLists[i].name = this.state.name;
                         dataLists[i].sex = this.state.sex;
                         dataLists[i].age = this.state.age;
@@ -54,6 +60,7 @@ class EditData extends React.Component {
                 localStorage.setItem('data', JSON.stringify(dataLists));
                 this.props.submit(JSON.stringify(dataLists));
                 break;
+            default:
         }
         this.props.close();
     }
