@@ -4,7 +4,7 @@ import '../index.css';
 class TableTools extends React.Component {
     constructor(props) {
         super(props);
-        this.state ={
+        this.state = {
             name: '',
         }
     }
@@ -31,7 +31,9 @@ class TableTools extends React.Component {
      */
     onHandleQueryClick() {
         let data = [];
-        data = JSON.parse(localStorage.getItem('data'));
+        if (localStorage.getItem('data') != null) {
+            data = JSON.parse(localStorage.getItem('data'));
+        }
         for (let i = 0; i < data.length; i++) {
             if (data[i].name.indexOf(this.state.name) === -1) {
                 data.splice(i--, 1);
@@ -44,7 +46,7 @@ class TableTools extends React.Component {
         return (
             <div style={{ margin: "30px 20px" }}>
                 <button className="create" onClick={this.onHandleCreateClick.bind(this)}>新建</button>
-                <input className="qurey" type="text" name="name" placeholder="请输入姓名" onChange={this.handleChange.bind(this)}/>
+                <input className="qurey" type="text" name="name" placeholder="请输入姓名" onChange={this.handleChange.bind(this)} />
                 <button className="queryBtn" onClick={this.onHandleQueryClick.bind(this)}>查询</button>
             </div>
         );

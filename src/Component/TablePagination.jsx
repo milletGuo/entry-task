@@ -13,6 +13,10 @@ class TablePagination extends React.Component {
         }
     }
 
+    /**
+     * 
+     * @param {*} nextProps 
+     */
     componentWillReceiveProps(nextProps) {
         let pageNum = parseInt(nextProps.data.length / 5);
         if (0 != nextProps.data.length % 5) {
@@ -45,6 +49,10 @@ class TablePagination extends React.Component {
      * 显示前一页
      */
     preText() {
+        if (this.state.currPageNum == 1) {
+            alert("当前已经是第一页");
+            return;
+        }
         this.setState({
             currPageNum: this.state.currPageNum -= 1,
         });
@@ -55,6 +63,10 @@ class TablePagination extends React.Component {
      * 显示下一页
      */
     nextLink() {
+        if (this.state.currPageNum == this.state.pageNum) {
+            alert("当前已经是最后一页");
+            return;
+        }
         this.setState({
             currPageNum: this.state.currPageNum += 1,
         });
@@ -90,11 +102,12 @@ class TablePagination extends React.Component {
      * 选中某一页
      */
     choosePage(event) {
+        const pageNum = parseInt(event.target.getAttribute("data-number"))
         this.setState({
-            currPageNum: parseInt(event.target.getAttribute("data-number")),
+            currPageNum: pageNum,
             pageNumStatus: 'choose',
         });
-        this.showCurrentPage(parseInt(event.target.getAttribute("data-number")));
+        this.showCurrentPage(pageNum);
     }
 
     /**
