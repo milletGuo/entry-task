@@ -67,6 +67,7 @@ class DataTable extends React.Component {
         let dataLists = JSON.parse(localStorage.getItem('data'));
         dataLists.splice(index - 1, 1);
         localStorage.setItem('data', JSON.stringify(dataLists));
+        this.setState({ dataToShow: dataLists });
         this.setState({ lists: dataLists });
     }
 

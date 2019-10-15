@@ -51,6 +51,9 @@ class DataList extends React.Component {
                         <th>姓名</th>
                         <th>性别</th>
                         <th>年龄</th>
+                        <th>班级</th>
+                        <th>是否为班主任</th>
+                        <th>课程</th>
                         <th>角色</th>
                         <th>操作</th>
                     </tr>
@@ -61,6 +64,9 @@ class DataList extends React.Component {
                                     <td data-index={data.index}>{data.name}</td>
                                     <td data-index={data.index}>{data.sex}</td>
                                     <td data-index={data.index}>{data.age}</td>
+                                    <td data-index={data.index}>{data.grade}</td>
+                                    <td data-index={data.index}>{data.isMaster}</td>
+                                    <td data-index={data.index}>{data.courses}</td>
                                     <td data-index={data.index}>{data.role}</td>
                                     <td>
                                         <div className="operation">

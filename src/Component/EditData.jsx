@@ -1,5 +1,7 @@
 import React from 'react';
 import '../index.css';
+import TeacherInfo from './TeacherInfo';
+import StudentInfo from './StudensInfo';
 
 // 用于标记表格的每一行
 let i = 0;
@@ -9,34 +11,143 @@ class EditData extends React.Component {
         super(props);
         this.state = {
             name: '',
-            sex: '',
+            sex: '男',
             age: '',
-            role: '',
+            role: '教师',
+            checkNameInfo: '请输入2~6位中文',
+            checkAgeInfo: '请输入正确的年龄',
+            teacherDiv: 'block',
+            studentDiv: 'none',
+            teacherInfo: {},
+            studentInfo: {},
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    /**
+     * 处理表单内容改变事件
+     * @param {事件信息} event 
+     */
     handleChange(event) {
         // 读取输入的值
         const name = event.target.name;
         const value = event.target.value;
-        //   更新状态
+        //  更新状态
         this.setState({
             [name]: value
-        })
+        }, () => {
+            switch (name) {
+                case 'name':
+                    this.checkName(this.state.name);
+                    break;
+                case "age":
+                    this.checkAge(this.state.age);
+                    break;
+                case 'role':
+                    if (this.state.role === "教师") {
+                        this.setState({
+                            teacherDiv: 'block',
+                            studentDiv: 'none',
+                        });
+                    } else {
+                        this.setState({
+                            teacherDiv: 'none',
+                            studentDiv: 'block',
+                        });
+                    }
+                    break;
+                default:
+            }
+        });
+
+        // this.setState({
+        //     [name]: value
+        // });
+        // switch (name) {
+        //     case 'name':
+        //         this.checkName(this.state.name);
+        //         break;
+        //     case "age":
+        //         this.checkAge(this.state.age);
+        //         break;
+        //     case 'role':
+        //         if (this.state.role === "教师") {
+        //             this.setState({
+        //                 teacherDiv: 'block',
+        //                 studentDiv: 'none',
+        //             });
+        //         } else {
+        //             this.setState({
+        //                 teacherDiv: 'none',
+        //                 studentDiv: 'block',
+        //             });
+        //         }
+        //         break;
+        //     default:
+        // }
     }
 
     /**
-     * 数据校验功能
+     * 用于更新角色信息
+     * @param {角色} role 
+     * @param {角色信息} data 
      */
-    verificationData() {
-
+    updateData(role, data) {
+        switch (role) {
+            case "教师":
+                this.setState({
+                    teacherInfo: data,
+                });
+                break;
+            case "学生":
+                this.setState({
+                    studentInfo: data,
+                });
+                break;
+            default:
+        }
     }
 
-    /**点击确定提交 */
+    /**
+     * 表单校验-姓名
+     * @param {姓名} name 
+     */
+    checkName(name) {
+        let reg = /^[\u4e00-\u9fa5]{2,4}$/;
+        if (!reg.test(name) || name == '') {
+            this.setState({ checkNameInfo: '请输入2~6位中文' });
+            return false;
+        } else {
+            this.setState({ checkNameInfo: '√' });
+            return true;
+        }
+    }
+
+    /**
+     * 表单校验-年龄
+     * @param {年龄} age 
+     */
+    checkAge(age) {
+        let reg = /^[1-9]{0,3}$/;
+        if (!reg.test(age) || age == '') {
+            this.setState({ checkAgeInfo: '请输入正确的年龄' });
+            return false;
+        } else {
+            this.setState({ checkAgeInfo: '√' });
+            return true;
+        }
+    }
+
+    /**
+     * 提交表单
+     */
     handleSubmit() {
+        if (!(this.checkName(this.state.name) && this.checkAge(this.state.age))) {
+            alert('你的输入有误，请按要求输入后再提交');
+            return;
+        }
         // localStorage中获取数据
         let dataLists = [];
         if (localStorage.getItem('data') != null) {
@@ -44,7 +155,19 @@ class EditData extends React.Component {
         }
         switch (this.props.status) {
             case 'create':
-                dataLists.push({ index: ++i, name: this.state.name, sex: this.state.sex, age: this.state.age, role: this.state.role });
+                if (this.state.role === "教师") {
+                    dataLists.push({
+                        index: ++i, name: this.state.name, sex: this.state.sex, age: this.state.age,
+                        grade: this.state.teacherInfo.grade, isMaster: this.state.teacherInfo.isMaster,
+                        role: this.state.role
+                    });
+                } else {
+                    dataLists.push({
+                        index: ++i, name: this.state.name, sex: this.state.sex, age: this.state.age,
+                        grade: this.state.studentInfo.grade, courses: this.state.studentInfo.courses,
+                        role: this.state.role
+                    });
+                }
                 localStorage.setItem('data', JSON.stringify(dataLists));
                 this.props.submit(JSON.stringify(dataLists));
                 break;
@@ -54,6 +177,9 @@ class EditData extends React.Component {
                         dataLists[i].name = this.state.name;
                         dataLists[i].sex = this.state.sex;
                         dataLists[i].age = this.state.age;
+                        dataLists[i].grade = this.state.teacherInfo.grade;
+                        dataLists[i].isMaster = this.state.teacherInfo.isMaster?this.state.teacherInfo.isMaster:'';
+                        dataLists[i].courses = this.state.studentInfo.courses?this.state.studentInfo.courses:'';
                         dataLists[i].role = this.state.role;
                     }
                 }
@@ -75,21 +201,31 @@ class EditData extends React.Component {
                 <form className="layer-content">
                     <div>
                         <label>姓名：</label>
-                        <input type="text" name="name" placeholder="请输入姓名" value={this.state.name} onChange={this.handleChange} />
+                        <input type="text" name="name" placeholder="请输入姓名" value={this.state.name} onChange={this.handleChange.bind(this)} />
+                        <span className={this.state.checkNameInfo === '√' ? "verifySuccess" : "verifyFail"}>{this.state.checkNameInfo}</span>
                     </div>
                     <div>
                         <label>性别：</label>
-                        <input type="text" name="sex" placeholder="请输入性别" value={this.state.sex} onChange={this.handleChange} />
+                        <select name="sex" value={this.state.sex} onChange={this.handleChange.bind(this)} >
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
                     </div>
                     <div>
                         <label>年龄：</label>
-                        <input type="text" name="age" placeholder="请输入年龄" value={this.state.age} onChange={this.handleChange} />
+                        <input type="text" name="age" placeholder="请输入年龄" value={this.state.age} onChange={this.handleChange.bind(this)} />
+                        <span className={this.state.checkAgeInfo === '√' ? "verifySuccess" : "verifyFail"}>{this.state.checkAgeInfo}</span>
                     </div>
                     <div>
                         <label>角色：</label>
-                        <input type="text" name="role" placeholder="请输入角色" value={this.state.role} onChange={this.handleChange} />
+                        <select name="role" value={this.state.role} onChange={this.handleChange.bind(this)}>
+                            <option value="教师">教师</option>
+                            <option value="学生">学生</option>
+                        </select>
                     </div>
                 </form>
+                <TeacherInfo display={this.state.teacherDiv} submitData={this.updateData.bind(this)} />
+                <StudentInfo display={this.state.studentDiv} submitData={this.updateData.bind(this)} />
                 <div><button className="submit" onClick={this.handleSubmit}>确定</button></div>
             </div>
         );
