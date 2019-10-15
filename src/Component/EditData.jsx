@@ -159,12 +159,14 @@ class EditData extends React.Component {
                     dataLists.push({
                         index: ++i, name: this.state.name, sex: this.state.sex, age: this.state.age,
                         grade: this.state.teacherInfo.grade, isMaster: this.state.teacherInfo.isMaster,
+                        courses: '',
                         role: this.state.role
                     });
                 } else {
                     dataLists.push({
                         index: ++i, name: this.state.name, sex: this.state.sex, age: this.state.age,
-                        grade: this.state.studentInfo.grade, courses: this.state.studentInfo.courses,
+                        grade: this.state.studentInfo.grade, isMaster: '',
+                        courses: this.state.studentInfo.courses,
                         role: this.state.role
                     });
                 }
@@ -174,12 +176,15 @@ class EditData extends React.Component {
             case 'edit':
                 for (let i = 0; i < dataLists.length; i++) {
                     if (this.props.index == dataLists[i].index) {
+                        if (this.state.role === "教师") {
+                            dataLists[i].isMaster = this.state.teacherInfo.isMaster ? this.state.teacherInfo.isMaster : '';
+                        } else {
+                            dataLists[i].courses = this.state.studentInfo.courses ? this.state.studentInfo.courses : '';
+                        }
                         dataLists[i].name = this.state.name;
                         dataLists[i].sex = this.state.sex;
                         dataLists[i].age = this.state.age;
                         dataLists[i].grade = this.state.teacherInfo.grade;
-                        dataLists[i].isMaster = this.state.teacherInfo.isMaster?this.state.teacherInfo.isMaster:'';
-                        dataLists[i].courses = this.state.studentInfo.courses?this.state.studentInfo.courses:'';
                         dataLists[i].role = this.state.role;
                     }
                 }
