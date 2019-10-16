@@ -14,8 +14,8 @@ class TablePagination extends React.Component {
     }
 
     /**
-     * 
-     * @param {*} nextProps 
+     * 在入参发生变化时，更改总页数
+     * @param {json} nextProps 新的入参
      */
     componentWillReceiveProps(nextProps) {
         let pageNum = parseInt(nextProps.data.length / 5);
@@ -32,6 +32,10 @@ class TablePagination extends React.Component {
         });
     }
 
+    /**
+     * 处理页码输入变化事件
+     * @param {object} event 事件对象
+     */
     handleChange(event) {
         this.setState({
             pageInput: event.target.value
@@ -85,6 +89,7 @@ class TablePagination extends React.Component {
 
     /**
      * 显示当前页
+     * @param {number} currPageNum 当前页码
      */
     showCurrentPage(currPageNum) {
         let dataLists = [];
@@ -99,7 +104,8 @@ class TablePagination extends React.Component {
     }
 
     /**
-     * 选中某一页
+     * 处理页码点击事件
+     * @param {object} event 事件对象
      */
     choosePage(event) {
         const pageNum = parseInt(event.target.getAttribute("data-number"))
@@ -116,6 +122,7 @@ class TablePagination extends React.Component {
     skipTo() {
         if (this.state.pageInput.trim() == '') {
             alert("请输入页码");
+            return;
         } else {
             this.setState({
                 currPageNum: this.state.pageInput,

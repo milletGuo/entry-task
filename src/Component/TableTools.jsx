@@ -5,7 +5,7 @@ class TableTools extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            name: '',       // 查询时输入的内容
         }
     }
 
@@ -17,34 +17,36 @@ class TableTools extends React.Component {
     }
 
     /**
-     * 获取查询输入框的值
+     * 处理表单内容改变事件
+     * @param {object}} event 事件信息
      */
     handleChange(event) {
-        //   更新状态
+        // 更新状态
         this.setState({
             name: event.target.value,
         })
     }
 
     /**
-     * 点击按钮进行查询
+     * 处理查询按钮点击事件
      */
     onHandleQueryClick() {
-        let data = [];
-        if (localStorage.getItem('data') != null) {
-            data = JSON.parse(localStorage.getItem('data'));
+        // 从入参中获取数据
+        let dataLists = [];
+        if (this.props.data.length != 0) {
+            dataLists = this.props.data;
         }
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].name.indexOf(this.state.name) === -1) {
-                data.splice(i--, 1);
+        for (let i = 0; i < dataLists.length; i++) {
+            if (dataLists[i].name.indexOf(this.state.name) === -1) {
+                dataLists.splice(i--, 1);
             }
         }
-        this.props.query(JSON.stringify(data));
+        this.props.query(dataLists);
     }
 
     /**
      * Promise模拟Ajax请求
-     * @param {请求url} url 
+     * @param {string} url 请求的url
      */
     promiseSimulateAjax(url) {
         // let xhr = new XMLHttpRequest();
@@ -76,6 +78,9 @@ class TableTools extends React.Component {
         return promise;
     }
 
+    /**
+     * 处理Promise请求事件
+     */
     executeAjax() {
         this.promiseSimulateAjax("http://10.17.18.101:8003/datatp-server/order/goods/query?pageSize=8&pageNum=1").then().catch();
     }

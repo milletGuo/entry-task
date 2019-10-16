@@ -12,7 +12,7 @@ class TeacherInfo extends React.Component {
 
     /**
      * 处理表单内容改变事件
-     * @param {事件信息} event 
+     * @param {object} event 事件对象
      */
     handleChange(event) {
         // 读取输入的值
@@ -20,20 +20,31 @@ class TeacherInfo extends React.Component {
         const value = event.target.value;
         //   更新状态
         this.setState({
-            [name]: value
+            [name]: value,
         });
     }
 
     /**
-     * 生命周期函数，在组建更新后触发
-     * @param {组件更新前的入参} prevProps 
-     * @param {组建更新前的状态} prevState 
+     * 组建更新后提交数据
+     * @param {json} prevProps 之前的入参
+     * @param {json} prevState 之前的状态
      */
     componentDidUpdate(prevProps, prevState) {
-        if (prevState != this.state) {
-            // const arr = [];
-            // arr.push(this.state);
+        if (prevState !== this.state) {
             this.props.submitData("教师", this.state);
+        }
+    }
+
+    /**
+     * 入参发生改变时，更改表单内容
+     * @param {json} newProps 新的入参
+     */
+    componentWillReceiveProps(newProps) {
+        if (newProps.teacherInfo.grade !== this.state.grade && !(newProps.teacherInfo.grade === undefined)) {
+            this.setState({
+                grade: newProps.teacherInfo.grade,
+                isMaster: newProps.teacherInfo.isMaster,
+            });
         }
     }
 

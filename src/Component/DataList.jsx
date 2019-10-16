@@ -5,14 +5,15 @@ class DataList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSelect: 0,
-            enter: "enter",
-            leave: "leave",
+            isSelect: 0,            // 是否选中当前行
+            enter: "enter",         // 鼠标移入样式
+            leave: "leave",         // 鼠标移出样式
         }
     }
 
     /**
      * 鼠标移入
+     * @param {object} event 事件对象
      */
     onMouseEnter(event) {
         this.setState({
@@ -22,6 +23,7 @@ class DataList extends React.Component {
 
     /**
      * 鼠标移出
+     * @param {object} event 事件对象
      */
     onMouseLeave(event) {
         this.setState({
@@ -30,14 +32,16 @@ class DataList extends React.Component {
     }
 
     /**
-     * 删除按钮监听
+     * 处理删除数据事件
+     * @param {object} event 事件对象
      */
     onHandleDelClick(event) {
         this.props.delData(event.target.getAttribute("data-index"));
     }
 
     /**
-     * 编辑按钮监听
+     * 处理编辑数据事件
+     * @param {object} event 事件对象
      */
     onHandleEditClick(event) {
         this.props.editData(event.target.getAttribute("data-index"));
