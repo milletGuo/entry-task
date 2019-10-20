@@ -13,7 +13,7 @@ class TableTools extends React.Component {
      * 点击新建按钮打开新建数据窗口
      */
     onHandleCreateClick() {
-        this.props.create();
+        this.props.create("create", { name: '', sex: '男', age: '', role: '教师', grade: '', isMaster: '是', courses: '', });
     }
 
     /**
@@ -31,17 +31,7 @@ class TableTools extends React.Component {
      * 处理查询按钮点击事件
      */
     onHandleQueryClick() {
-        // 从入参中获取数据
-        let dataLists = [];
-        if (this.props.data.length != 0) {
-            dataLists = this.props.data;
-        }
-        for (let i = 0; i < dataLists.length; i++) {
-            if (dataLists[i].name.indexOf(this.state.name) === -1) {
-                dataLists.splice(i--, 1);
-            }
-        }
-        this.props.query(dataLists);
+        this.props.query(this.state.name);
     }
 
     /**
@@ -67,11 +57,10 @@ class TableTools extends React.Component {
             xhr.send();
             xhr.onload = function () {
                 if (this.status === 200) {
-                    console.log(xhr.responseText);
                     resolve(xhr.responseText)
                 } else {
                     console.log("请求失败！");
-                    reject();
+                    reject("请求失败！");
                 }
             }
         });
@@ -82,14 +71,14 @@ class TableTools extends React.Component {
      * 处理Promise请求事件
      */
     executeAjax() {
-        this.promiseSimulateAjax("http://10.17.18.101:8003/datatp-server/order/goods/query?pageSize=8&pageNum=1").then().catch();
+        this.promiseSimulateAjax("http://localhost:3000/#").then((resolve) => { console.log(resolve) }).catch();
     }
 
     render() {
         return (
             <div style={{ margin: "30px 20px" }}>
                 <button className="create" onClick={this.onHandleCreateClick.bind(this)}>新建</button>
-                <input className="qurey" type="text" name="name" placeholder="请输入姓名" onChange={this.handleChange.bind(this)} />
+                <input className="qurey" type="text" name="name" placeholder="请输入姓名" autoComplete="off" onChange={this.handleChange.bind(this)} />
                 <button className="queryBtn" onClick={this.onHandleQueryClick.bind(this)}>查询</button>
                 <button className="simulateAjax" onClick={this.executeAjax.bind(this)}>Promise请求</button>
             </div>

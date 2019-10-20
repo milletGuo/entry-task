@@ -6,30 +6,34 @@ class TablePagination extends React.Component {
         super(props);
         this.state = {
             currPageNum: 1,                   // 当前页码
-            pageNum: 0,                       // 总页数
-            pageNumStatus: 'unChoose',        // 页码状态
+            pageCount: 0,                     // 总页数
             pageInput: '',                    // 输入的页码
-            pageArray: [],                     // 页码数组
+            pageArray: [],                    // 页码数组
         }
     }
 
     /**
-     * 在入参发生变化时，更改总页数
-     * @param {json} nextProps 新的入参
+     * 组建更新后，根据入参是否发生变化，设置总页数及页码数组
+     * @param {Object} prevProps 
+     * @param {Object} prevState 
      */
-    componentWillReceiveProps(nextProps) {
-        let pageNum = parseInt(nextProps.data.length / 5);
-        if (0 != nextProps.data.length % 5) {
-            pageNum += 1;
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.data.length !== prevProps.data.length) {
+            // 获取总页数
+            let pageCount = parseInt(this.props.data.length / 5);
+            if (0 !== this.props.length % 5) {
+                pageCount += 1;
+            }
+            // 获取页码数组
+            let pageArray = [];
+            for (let i = 0; i < pageCount; i++) {
+                pageArray.push((i + 1));
+            }
+            this.setState({
+                pageNum: pageCount,
+                pageArray: pageArray,
+            });
         }
-        let pageArray = [];
-        for (let i = 0; i < pageNum; i++) {
-            pageArray.push((i + 1));
-        }
-        this.setState({
-            pageNum: pageNum,
-            pageArray: pageArray,
-        });
     }
 
     /**
@@ -53,12 +57,14 @@ class TablePagination extends React.Component {
      * 显示前一页
      */
     preText() {
-        if (this.state.currPageNum == 1) {
+        if (this.state.currPageNum === 1) {
             alert("当前已经是第一页");
             return;
         }
+        let currPageNum = this.state.currPageNum;
+        currPageNum -= 1;
         this.setState({
-            currPageNum: this.state.currPageNum -= 1,
+            currPageNum: currPageNum,
         });
         this.showCurrentPage(this.state.currPageNum);
     }
@@ -67,12 +73,14 @@ class TablePagination extends React.Component {
      * 显示下一页
      */
     nextLink() {
-        if (this.state.currPageNum == this.state.pageNum) {
+        if (this.state.currPageNum === this.state.pageCount) {
             alert("当前已经是最后一页");
             return;
         }
+        let currPageNum = this.state.currPageNum;
+        currPageNum += 1;
         this.setState({
-            currPageNum: this.state.currPageNum += 1,
+            currPageNum: currPageNum,
         });
         this.showCurrentPage(this.state.currPageNum);
     };
@@ -82,9 +90,9 @@ class TablePagination extends React.Component {
      */
     lastLink() {
         this.setState({
-            currPageNum: this.state.pageNum,
+            currPageNum: this.state.pageCount,
         });
-        this.showCurrentPage(this.state.currPageNum);
+        this.showCurrentPage(this.state.pageCount);
     }
 
     /**
@@ -92,11 +100,8 @@ class TablePagination extends React.Component {
      * @param {number} currPageNum 当前页码
      */
     showCurrentPage(currPageNum) {
-        let dataLists = [];
-        if (localStorage.getItem('data') != null) {
-            dataLists = JSON.parse(localStorage.getItem('data'));
-        }
-        if (currPageNum !== this.state.pageNum) {
+        let dataLists = this.props.data.slice();
+        if (currPageNum !== this.state.pageCount) {
             this.props.showData(dataLists.splice((currPageNum - 1) * 5, 5));
         } else {
             this.props.showData(dataLists.splice((currPageNum - 1) * 5, dataLists.length - (currPageNum - 1) * 5));
@@ -111,7 +116,6 @@ class TablePagination extends React.Component {
         const pageNum = parseInt(event.target.getAttribute("data-number"))
         this.setState({
             currPageNum: pageNum,
-            pageNumStatus: 'choose',
         });
         this.showCurrentPage(pageNum);
     }
@@ -120,7 +124,7 @@ class TablePagination extends React.Component {
      * 跳转到某一页
      */
     skipTo() {
-        if (this.state.pageInput.trim() == '') {
+        if (this.state.pageInput.trim() === '') {
             alert("请输入页码");
             return;
         } else {
@@ -138,7 +142,7 @@ class TablePagination extends React.Component {
                     <button onClick={this.preText.bind(this)}>上一页</button>
                     {
                         this.state.pageArray.map((data) => {
-                            return <a href='#' className={this.state.pageNumStatus} key={data} data-number={data} onClick={this.choosePage.bind(this)}>{data}</a>
+                            return <button className={this.state.currPageNum === data ? "choose" : "unChoose"} key={data} data-number={data} onClick={this.choosePage.bind(this)}>{data}</button>
                         })
                     }
                     <button onClick={this.nextLink.bind(this)}>下一页</button>

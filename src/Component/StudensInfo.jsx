@@ -2,80 +2,49 @@ import React from 'react';
 import '../index.css';
 
 class StudentInfo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            grade: '',
-            course: [],
-        }
-    }
 
     /**
      * 处理表单内容改变事件
-     * @param {object} event 事件对象
+     * @param {Object} event 事件对象
      */
     handleChange(event) {
         // 读取输入的值
         const name = event.target.name;
         const value = event.target.value;
-        if (name === "course") {
-            let items = this.state.course.slice();
-            let index = items.indexOf(value);
-            index === -1 ? items.push(value) : items.splice(index, 1);
-            this.setState({ course: items });
-        } else {
-            this.setState({
-                [name]: value
-            });
-        }
-    }
-
-    /**
-      * 组建更新后提交数据
-      * @param {json} prevProps 之前的入参
-      * @param {json} prevState 之前的状态
-      */
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState != this.state) {
+        let data = JSON.parse(JSON.stringify(this.props.studentInfo));
+        let courses = data.courses ? data.courses.split(' ') : [];
+        if (name === "courses") {
+            let index = courses.indexOf(value);
+            index === -1 ? courses.push(value) : courses.splice(index, 1);
             let courseStr = '';
-            for (let i = 0; i < this.state.course.length; i++) {
-                courseStr += this.state.course[i];
+            for (let i = 0; i < courses.length; i++) {
+                courseStr += courses[i];
                 courseStr += ' ';
             }
-            let data = { grade: this.state.grade, courses: courseStr };
-            this.props.submitData("学生", data);
+            data[name] = courseStr;
+        } else {
+            data[name] = value;
         }
-    }
-
-    /**
-     * 入参发生改变时，更改表单内容
-     * @param {json} newProps 新的入参
-     */
-    componentWillReceiveProps(newProps) {
-        if (newProps.studentInfo.grade !== this.state.grade && !(newProps.studentInfo.grade === undefined)) {
-            let courses = newProps.studentInfo.courses.split(' ');
-            this.setState({
-                grade: newProps.studentInfo.grade,
-                course: courses,
-            });
-        }
+        this.props.formChange(data);
     }
 
     render() {
+        const data = this.props.studentInfo;
+        const courses = data.courses ? data.courses.split(' ') : [];
         return (
             <div style={{ display: this.props.display }} className="studentDiv">
                 <form>
                     <div>
                         <label>所在班级：</label>
-                        <input type="text" name="grade" placeholder="请输入班级" value={this.state.grade} onChange={this.handleChange.bind(this)} />
-                        <span className={this.state.checkGradeInfo === '√' ? "verifySuccess" : "verifyFail"}>{this.state.checkGradeInfo}</span>
+                        <input type="text" name="grade" placeholder="请输入班级" autoComplete="off" value={data.grade} onChange={this.handleChange.bind(this)} />
+                        {/* <span className={this.state.checkGradeInfo === '√' ? "verifySuccess" : "verifyFail"}>{this.state.checkGradeInfo}</span> */}
                     </div>
                     <div>
                         <label>所学课程：</label>
-                        <input type="checkbox" name="course" value="语文" checked={this.state.course.indexOf("语文") !== -1} onChange={this.handleChange.bind(this)} />语文
-                <input type="checkbox" name="course" value="数学" checked={this.state.course.indexOf("数学") !== -1} onChange={this.handleChange.bind(this)} />数学
-                <input type="checkbox" name="course" value="英语" checked={this.state.course.indexOf("英语") !== -1} onChange={this.handleChange.bind(this)} />英语
-              </div>
+                        <input type="checkbox" name="course" value="语文" checked={courses.indexOf("语文") !== -1} onChange={this.handleChange.bind(this)} />语文
+                        <input type="checkbox" name="course" value="数学" checked={courses.indexOf("数学") !== -1} onChange={this.handleChange.bind(this)} />数学
+                        <input type="checkbox" name="course" value="英语" checked={courses.indexOf("英语") !== -1} onChange={this.handleChange.bind(this)} />英语
+                    </div>
                 </form>
             </div>
         )
