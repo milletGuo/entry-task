@@ -5,7 +5,7 @@ class TeacherInfo extends React.Component {
 
     /**
      * 处理表单内容改变事件
-     * @param {object} event 事件对象
+     * @param {Object} event 事件对象
      */
     handleChange(event) {
         const name = event.target.name;

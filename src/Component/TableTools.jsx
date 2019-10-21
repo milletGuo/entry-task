@@ -18,7 +18,7 @@ class TableTools extends React.Component {
 
     /**
      * 处理表单内容改变事件
-     * @param {object}} event 事件信息
+     * @param {Object}} event 事件对象
      */
     handleChange(event) {
         // 更新状态
@@ -31,7 +31,11 @@ class TableTools extends React.Component {
      * 处理查询按钮点击事件
      */
     onHandleQueryClick() {
-        this.props.query(this.state.name);
+        const dataLists = this.props.data.slice();
+        let queryResult = dataLists.filter((item) => {
+            return (item.name.indexOf(this.state.name) !== -1);
+        });
+        this.props.query("query", queryResult);
     }
 
     /**

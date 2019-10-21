@@ -37,13 +37,12 @@ class StudentInfo extends React.Component {
                     <div>
                         <label>所在班级：</label>
                         <input type="text" name="grade" placeholder="请输入班级" autoComplete="off" value={data.grade} onChange={this.handleChange.bind(this)} />
-                        {/* <span className={this.state.checkGradeInfo === '√' ? "verifySuccess" : "verifyFail"}>{this.state.checkGradeInfo}</span> */}
                     </div>
                     <div>
                         <label>所学课程：</label>
-                        <input type="checkbox" name="course" value="语文" checked={courses.indexOf("语文") !== -1} onChange={this.handleChange.bind(this)} />语文
-                        <input type="checkbox" name="course" value="数学" checked={courses.indexOf("数学") !== -1} onChange={this.handleChange.bind(this)} />数学
-                        <input type="checkbox" name="course" value="英语" checked={courses.indexOf("英语") !== -1} onChange={this.handleChange.bind(this)} />英语
+                        <input type="checkbox" name="courses" value="语文" checked={courses.indexOf("语文") !== -1} onChange={this.handleChange.bind(this)} />语文
+                        <input type="checkbox" name="courses" value="数学" checked={courses.indexOf("数学") !== -1} onChange={this.handleChange.bind(this)} />数学
+                        <input type="checkbox" name="courses" value="英语" checked={courses.indexOf("英语") !== -1} onChange={this.handleChange.bind(this)} />英语
                     </div>
                 </form>
             </div>

@@ -7,13 +7,13 @@ class EditData extends React.Component {
 
     /**
      * 处理表单内容改变事件
-     * @param {object} event 事件对象
+     * @param {Object} event 事件对象
      */
     handleChange(event) {
         // 读取输入的值
         const name = event.target.name;
         const value = event.target.value;
-        let data = JSON.parse(JSON.stringify(this.props.data));
+        let data = JSON.parse(JSON.stringify(this.props.dataToEdit));
         if (value === "教师") {
             data.isMaster = "是"
         }
@@ -23,10 +23,10 @@ class EditData extends React.Component {
 
     /**
      * 处理教师组件表单数据改变事件
-     * @param {Object} data 
+     * @param {Object} data 表单数据
      */
     handleFormChange(data) {
-        let dataProps = JSON.parse(JSON.stringify(this.props.data));
+        let dataProps = JSON.parse(JSON.stringify(this.props.dataToEdit));
         if (dataProps.role === "教师") {
             dataProps.grade = data.grade;
             dataProps.isMaster = data.isMaster;
@@ -42,7 +42,7 @@ class EditData extends React.Component {
      */
     handleSubmit() {
         // 从入参中获取数据
-        let data = this.props.data;
+        let data = this.props.dataToEdit;
         if (!(this.checkName(data.name) && this.checkAge(data.age))) {
             alert('你的输入有误，请按要求输入后再提交');
             return;
@@ -62,7 +62,27 @@ class EditData extends React.Component {
                 courses: data.courses,
             };
         }
-        this.props.submit(data);
+        // 更新dataLists中的数据
+        let dataLists = this.props.data.slice();
+        if (this.props.status === "create") {
+            let index = this.findMaxIndex(dataLists);
+            index++;
+            dataLists.push({
+                index: index, name: data.name, sex: data.sex, age: data.age, role: data.role,
+                grade: data.grade,
+                isMaster: data.isMaster,
+                courses: data.courses,
+            });
+            this.props.submit("create", dataLists);
+        } else {
+            dataLists = dataLists.map((item) => {
+                if (data.index === item.index) {
+                    item = data;
+                }
+                return item;
+            });
+            this.props.submit("edit", dataLists);
+        }
         this.props.close();
     }
 
@@ -92,8 +112,26 @@ class EditData extends React.Component {
         }
     }
 
+
+    /**
+     * 找出数据索引的最大值
+     * @param {Object []} data 需要查找的数据
+     * @returns {Number} 传入数据的最大索引
+     */
+    findMaxIndex(data) {
+        let dataLists = [];
+        data.forEach(function (item) {
+            dataLists.push(item.index);
+        });
+        if (dataLists.length === 0) {
+            return 0;
+        } else {
+            return Math.max.apply(null, dataLists);
+        }
+    }
+
     render() {
-        let data = this.props.data;
+        let data = this.props.dataToEdit;
         switch (data.role) {
             case "教师":
                 data = {
@@ -151,7 +189,7 @@ class EditData extends React.Component {
                     </div>
                 </form>
                 <TeacherInfo display={data.teacherDiv} formChange={this.handleFormChange.bind(this)} teacherInfo={data.teacherInfo} />
-                <StudentInfo display={data.studentDiv} formChange={this.handleFormChange.bind(this)} studentInfo={data.studentInfo}/>
+                <StudentInfo display={data.studentDiv} formChange={this.handleFormChange.bind(this)} studentInfo={data.studentInfo} />
                 <div><button className="submit" onClick={this.handleSubmit.bind(this)}>确定</button></div>
             </div>
         );

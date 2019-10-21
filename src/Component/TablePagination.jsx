@@ -21,7 +21,7 @@ class TablePagination extends React.Component {
         if (this.props.data.length !== prevProps.data.length) {
             // 获取总页数
             let pageCount = parseInt(this.props.data.length / 5);
-            if (0 !== this.props.length % 5) {
+            if (0 !== this.props.data.length % 5) {
                 pageCount += 1;
             }
             // 获取页码数组
@@ -30,7 +30,8 @@ class TablePagination extends React.Component {
                 pageArray.push((i + 1));
             }
             this.setState({
-                pageNum: pageCount,
+                currPageNum: 1,
+                pageCount: pageCount,
                 pageArray: pageArray,
             });
         }
@@ -38,7 +39,7 @@ class TablePagination extends React.Component {
 
     /**
      * 处理页码输入变化事件
-     * @param {object} event 事件对象
+     * @param {Object} event 事件对象
      */
     handleChange(event) {
         this.setState({
@@ -66,7 +67,7 @@ class TablePagination extends React.Component {
         this.setState({
             currPageNum: currPageNum,
         });
-        this.showCurrentPage(this.state.currPageNum);
+        this.showCurrentPage(currPageNum);
     }
 
     /**
@@ -82,7 +83,7 @@ class TablePagination extends React.Component {
         this.setState({
             currPageNum: currPageNum,
         });
-        this.showCurrentPage(this.state.currPageNum);
+        this.showCurrentPage(currPageNum);
     };
 
     /**
@@ -110,10 +111,9 @@ class TablePagination extends React.Component {
 
     /**
      * 处理页码点击事件
-     * @param {object} event 事件对象
+     * @param {number} pageNum 页码
      */
-    choosePage(event) {
-        const pageNum = parseInt(event.target.getAttribute("data-number"))
+    choosePage(pageNum) {
         this.setState({
             currPageNum: pageNum,
         });
@@ -128,10 +128,11 @@ class TablePagination extends React.Component {
             alert("请输入页码");
             return;
         } else {
+            let currPageNum = parseInt(this.state.pageInput);
             this.setState({
-                currPageNum: this.state.pageInput,
+                currPageNum: currPageNum,
             });
-            this.showCurrentPage(this.state.pageInput);
+            this.showCurrentPage(currPageNum);
         }
     }
 
@@ -142,7 +143,7 @@ class TablePagination extends React.Component {
                     <button onClick={this.preText.bind(this)}>上一页</button>
                     {
                         this.state.pageArray.map((data) => {
-                            return <button className={this.state.currPageNum === data ? "choose" : "unChoose"} key={data} data-number={data} onClick={this.choosePage.bind(this)}>{data}</button>
+                            return <button className={this.state.currPageNum === data ? "choose" : "unChoose"} key={data} data-number={data} onClick={this.choosePage.bind(this, data)}>{data}</button>
                         })
                     }
                     <button onClick={this.nextLink.bind(this)}>下一页</button>

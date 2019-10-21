@@ -11,40 +11,39 @@ class DataList extends React.Component {
 
     /**
      * 鼠标移入
-     * @param {object} event 事件对象
+     * @param {number} dataIndex 行索引
      */
-    onMouseEnter(event) {
+    onMouseEnter(dataIndex) {
         this.setState({
-            isSelect: parseInt(event.target.getAttribute("data-index")),
+            isSelect: dataIndex,
         });
     }
 
     /**
      * 鼠标移出
-     * @param {object} event 事件对象
+     * @param {number} dataIndex 行索引
      */
-    onMouseLeave(event) {
+    onMouseLeave(dataIndex) {
         this.setState({
-            isSelect: parseInt(event.target.getAttribute("data-index")),
+            isSelect: 0,
         });
     }
 
     /**
      * 处理删除数据事件
-     * @param {object} event 事件对象
+     * @param {number} dataIndex 数据索引
      */
-    onHandleDelClick(event) {
-        this.props.delData(parseInt(event.target.getAttribute("data-index")));
+    onHandleDelClick(dataIndex) {
+        this.props.delData(dataIndex);
     }
 
     /**
      * 处理编辑数据事件
-     * @param {object} event 事件对象
+     * @param {number} dataIndex 数据索引
      */
-    onHandleEditClick(event) {
-        let index = parseInt(event.target.getAttribute("data-index"));
+    onHandleEditClick(dataIndex) {
         let data = [];
-        data = this.props.dataToShow.filter((item) => { return index === item.index });
+        data = this.props.dataToShow.filter((item) => { return dataIndex === item.index });
         this.props.editData("edit", data[0]);
     }
 
@@ -65,7 +64,7 @@ class DataList extends React.Component {
                     {
                         this.props.dataToShow.map((data) => {
                             return (
-                                <tr className={this.state.isSelect === data.index ? "enter" : "leave"} key={data.index} id={data.index} onMouseEnter={this.onMouseEnter.bind(this)} onMouseLeave={this.onMouseLeave.bind(this)} >
+                                <tr className={this.state.isSelect === data.index ? "enter" : "leave"} key={data.index} id={data.index} onMouseEnter={this.onMouseEnter.bind(this, data.index)} onMouseLeave={this.onMouseLeave.bind(this, data.index)} >
                                     <td data-index={data.index}>{data.name}</td>
                                     <td data-index={data.index}>{data.sex}</td>
                                     <td data-index={data.index}>{data.age}</td>
@@ -75,8 +74,8 @@ class DataList extends React.Component {
                                     <td data-index={data.index}>{data.role}</td>
                                     <td>
                                         <div className="operation">
-                                            <button onClick={this.onHandleEditClick.bind(this)} data-index={data.index} disabled={this.props.disabled}>编辑</button>
-                                            <button onClick={this.onHandleDelClick.bind(this)} data-index={data.index} disabled={this.props.disabled}>删除</button>
+                                            <button onClick={this.onHandleEditClick.bind(this, data.index)} data-index={data.index} disabled={this.props.disabled}>编辑</button>
+                                            <button onClick={this.onHandleDelClick.bind(this, data.index)} data-index={data.index} disabled={this.props.disabled}>删除</button>
                                         </div>
                                     </td>
                                 </tr>
