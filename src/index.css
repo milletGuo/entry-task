@@ -139,6 +139,7 @@
     margin: -200px -250px;
     background: #ffffff;
     border: 1px #ccc solid;
+    z-index: 999;
 }
 
 .layer .layer-title {
@@ -242,5 +243,5 @@
 }
 
 .refresh {
-    margin: 0px 220px;
+    margin: 0px 400px;
 }
