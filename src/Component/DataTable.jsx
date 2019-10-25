@@ -47,7 +47,7 @@ class DataTable extends React.Component {
                 dataLists.splice(i, 1);
             }
         }
-        this.setState({ dataLists: dataLists,queryResult: dataLists });
+        this.setState({ dataLists: dataLists, queryResult: dataLists });
         this.showData(dataLists);
     }
 
