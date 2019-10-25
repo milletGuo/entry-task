@@ -24,7 +24,10 @@ class CanvasDemo extends React.Component {
         }
         // 清除画布区域
         context.clearRect(0, 0, draw.width, draw.height);
-        let geometrys = [];         // 存储几何要素
+
+        // 存储几何要素
+        let geometrys = [];         
+
         // 产生几何要素(点、线、面)
         for (let i = 0; i < 5; i++) {
             geometrys.push(new Point());

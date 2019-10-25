@@ -18,7 +18,7 @@ class TablePagination extends React.Component {
      * @param {Object} prevState 
      */
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.data.length !== prevProps.data.length) {
+        if (this.props.data !== prevProps.data) {
             // 获取总页数
             let pageCount = parseInt(this.props.data.length / 5);
             if (0 !== this.props.data.length % 5) {

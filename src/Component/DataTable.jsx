@@ -78,7 +78,7 @@ class DataTable extends React.Component {
     }
 
     /**
-     * 展示数据，可增加一个limit参数，表示限制每页展示条数，目前限制为5条
+     * 展示数据
      * @param {any []} data 传入的数据
      */
     showData(data) {

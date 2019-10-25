@@ -22,7 +22,7 @@ class EditData extends React.Component {
     }
 
     /**
-     * 处理教师组件表单数据改变事件
+     * 处理教师或学生组件表单数据改变事件
      * @param {Object} data 表单数据
      */
     handleFormChange(data) {

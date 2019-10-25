@@ -23,7 +23,7 @@ class DataList extends React.Component {
      * 鼠标移出
      * @param {number} dataIndex 行索引
      */
-    onMouseLeave(dataIndex) {
+    onMouseLeave() {
         this.setState({
             isSelect: 0,
         });

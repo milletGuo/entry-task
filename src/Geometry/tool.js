@@ -6,11 +6,10 @@ import Point from './Point';
  */
 export function createPaths() {
     let paths = [];
-    let vertexNum = Math.round(Math.random() * 2 + 3);
+    let vertexNum = Math.round(Math.random() * 10);
+    vertexNum = vertexNum < 3 ? 3 : vertexNum;
     for (let i = 0; i < vertexNum; i++) {
-        let x = Math.round(Math.random() * 1000);
-        let y = Math.round(Math.random() * 540);
-        let point = new Point(x, y);
+        let point = new Point();
         paths.push(point);
     }
     return paths;
