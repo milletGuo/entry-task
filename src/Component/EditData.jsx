@@ -112,7 +112,6 @@ class EditData extends React.Component {
         }
     }
 
-
     /**
      * 找出数据索引的最大值
      * @param {Object []} data 需要查找的数据
@@ -159,8 +158,8 @@ class EditData extends React.Component {
         return (
             <div className="layer" style={{ display: this.props.display }}>
                 <div className="layer-title">
-                    <span>编辑数据</span>
-                    <span></span>
+                    <span>{this.props.status === "create" ? "新建" : "编辑"}数据</span>
+                    <span className="close" onClick={this.props.close.bind(this)}>&Chi;</span>
                 </div>
                 <form className="layer-content">
                     <div>
