@@ -22,6 +22,7 @@ class CanvasDemo extends React.Component {
             alert("浏览器不支持2D绘图！！！");
             return;
         }
+        
         // 清除画布区域
         context.clearRect(0, 0, draw.width, draw.height);
 
