@@ -19,6 +19,10 @@ class Geometry {
         this.lineWidth = 3;
     }
 
+    /**
+     * 抽象方法，子类必须实现
+     * @param {Object} context 
+     */
     render(context) {
         throw new Error('Unimplemented abstract method.');
     }

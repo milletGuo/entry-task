@@ -23,7 +23,6 @@ class TeacherInfo extends React.Component {
                     <div>
                         <label>所教班级：</label>
                         <input type="text" name="grade" placeholder="请输入班级" autoComplete="off" value={data.grade} onChange={this.handleChange.bind(this)} />
-                        {/* <span className={this.state.checkGradeInfo === '√' ? "verifySuccess" : "verifyFail"}>{this.state.checkGradeInfo}</span> */}
                     </div>
                     <div>
                         <label>班主任：</label>

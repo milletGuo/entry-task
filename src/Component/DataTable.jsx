@@ -54,7 +54,7 @@ class DataTable extends React.Component {
     /**
      * 显示EditData组件
      * @param {string} status 组件状态(新建，编辑)
-     * @param {Object} data  需要新建或编辑的数据
+     * @param {json} data  需要新建或编辑的数据
      */
     openDialog(status, data) {
         this.setState({
@@ -79,7 +79,7 @@ class DataTable extends React.Component {
 
     /**
      * 展示数据
-     * @param {any []} data 传入的数据
+     * @param {Array<json>} data 传入的数据
      */
     showData(data) {
         let dataToShow = data.slice();
@@ -95,7 +95,8 @@ class DataTable extends React.Component {
 
     /**
      * 更新数据(表单提交后执行)
-     * @param {any []} data 需要更新的数据
+     * @param {string} status 更新时状态
+     * @param {Array<json>} data 需要更新的数据
      */
     updateData(status, data) {
         if (status === "query") {

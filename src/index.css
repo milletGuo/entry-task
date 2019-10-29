@@ -21,7 +21,6 @@
     border: 1px solid #ccc;
     padding: 7px 0px;
     border-radius: 3px;
-    /*css3属性IE不支持*/
     padding-left: 5px;
 }
 
@@ -187,7 +186,6 @@
     border: 1px solid #ccc;
     padding: 7px 0px;
     border-radius: 3px;
-    /*css3属性IE不支持*/
     padding-left: 5px;
 }
 
@@ -223,6 +221,8 @@
     cursor: pointer;
 }
 
+/**教师组件、学生组件样式*/
+
 .teacherDiv {
     padding: 0px 40px;
 }
@@ -238,6 +238,8 @@
 .studentDiv div {
     margin: 5px 0px;
 }
+
+/**绘图组件样式*/
 
 .canvasDiv {
     position: absolute;

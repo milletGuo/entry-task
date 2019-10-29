@@ -13,9 +13,9 @@ class TablePagination extends React.Component {
     }
 
     /**
-     * 组建更新后，根据入参是否发生变化，设置总页数及页码数组
-     * @param {Object} prevProps 
-     * @param {Object} prevState 
+     * 组件更新后，根据入参是否发生变化，设置总页数及页码数组
+     * @param {Object} prevProps 之前的入参
+     * @param {Object} prevState 之前的状态
      */
     componentDidUpdate(prevProps, prevState) {
         if (this.props.data !== prevProps.data) {
@@ -84,7 +84,7 @@ class TablePagination extends React.Component {
             currPageNum: currPageNum,
         });
         this.showCurrentPage(currPageNum);
-    };
+    }
 
     /**
      * 显示最后一页

@@ -23,7 +23,7 @@ class EditData extends React.Component {
 
     /**
      * 处理教师或学生组件表单数据改变事件
-     * @param {Object} data 表单数据
+     * @param {json} data 表单数据
      */
     handleFormChange(data) {
         let dataProps = JSON.parse(JSON.stringify(this.props.dataToEdit));
@@ -48,31 +48,17 @@ class EditData extends React.Component {
             return;
         }
         if (data.role === "教师") {
-            data = {
-                index: data.index, name: data.name, sex: data.sex, age: data.age,
-                role: data.role, grade: data.grade,
-                isMaster: data.isMaster,
-                courses: '',
-            };
+            data.courses = '';
         } else {
-            data = {
-                index: data.index, name: data.name, sex: data.sex, age: data.age,
-                role: data.role, grade: data.grade,
-                isMaster: '',
-                courses: data.courses,
-            };
+            data.isMaster = '';
         }
         // 更新dataLists中的数据
         let dataLists = this.props.data.slice();
         if (this.props.status === "create") {
             let index = this.findMaxIndex(dataLists);
             index++;
-            dataLists.push({
-                index: index, name: data.name, sex: data.sex, age: data.age, role: data.role,
-                grade: data.grade,
-                isMaster: data.isMaster,
-                courses: data.courses,
-            });
+            data.index = index;
+            dataLists.push(data);
             this.props.submit("create", dataLists);
         } else {
             dataLists = dataLists.map((item) => {
@@ -114,8 +100,8 @@ class EditData extends React.Component {
 
     /**
      * 找出数据索引的最大值
-     * @param {Object []} data 需要查找的数据
-     * @returns {Number} 传入数据的最大索引
+     * @param {Array<json>} data 需要查找的数据
+     * @returns {number} 传入数据的最大索引
      */
     findMaxIndex(data) {
         let dataLists = [];
@@ -131,6 +117,7 @@ class EditData extends React.Component {
 
     render() {
         let data = this.props.dataToEdit;
+        // 对传递进来的参数进行格式化
         switch (data.role) {
             case "教师":
                 data = {
@@ -152,6 +139,7 @@ class EditData extends React.Component {
                 break;
             default:
         }
+        // 校验数据是否合理
         const checkNameInfo = this.checkName(data.name) ? '√' : '请输入2~4位中文';
         const checkAgeInfo = this.checkAge(data.age) ? '√' : '请输入正确的年龄';
 
