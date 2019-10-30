@@ -16,12 +16,7 @@ class StudentInfo extends React.Component {
         if (name === "courses") {
             let index = courses.indexOf(value);
             index === -1 ? courses.push(value) : courses.splice(index, 1);
-            let courseStr = '';
-            for (let i = 0; i < courses.length; i++) {
-                courseStr += courses[i];
-                courseStr += ' ';
-            }
-            data[name] = courseStr;
+            data[name] = courses.join(' ');
         } else {
             data[name] = value;
         }
