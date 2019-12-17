@@ -112,7 +112,7 @@ class DataTable extends React.Component {
      */
     componentDidMount() {
         // 首次挂载加载localStorage中的数据
-        if (localStorage.getItem('data') != null) {
+        if (localStorage.getItem('data') != 'undefined') {
             let tempData = JSON.parse(localStorage.getItem('data'));
             this.setState({ dataLists: tempData, queryResult: tempData });
             this.showData(tempData);
